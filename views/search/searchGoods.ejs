@@ -1,0 +1,94 @@
+<% include ../head %>
+<link rel="stylesheet" href="http://cache.amap.com/lbs/static/main.css?v=1.0"/>
+    <script type="text/javascript"
+            src="http://webapi.amap.com/maps?v=1.3&key=ebb3310e602e7027987911af5e30be56"></script>
+
+<script>
+searchForm.keywords.value="<%-keywords%>";
+function  pos1(lng,lat,shopname){
+// alert("SSS");
+// 	alert(lng);
+// alert(lat);
+// alert(shopname);
+// alert(typeof(lat));
+// alert(typeof(lng));
+// alert(typeof(shopname));
+
+ 
+    //初始化地图对象，加载地图
+   
+ var map = new AMap.Map('mapContainer', {
+       
+		view: new AMap.View2D({
+			center: new AMap.LngLat( lng, lat),
+			zoom: 18
+		})
+    });
+
+ 
+ var marker = new AMap.Marker({
+						map: map,
+						position: [lng  ,lat],
+						title: shopname,
+						icon: "http://webapi.amap.com/theme/v1.3/markers/n/mark_b.png",
+						offset: new AMap.Pixel(-10, -34)
+					});
+
+					
+					marker.setMap(map);
+					marker.setLabel({
+						offset: new AMap.Pixel(-10, -20),
+						content: shopname
+					});
+AMap.plugin(['AMap.ToolBar','AMap.Scale','AMap.OverView'],
+				    function(){
+				        map.addControl(new AMap.ToolBar());
+
+				        map.addControl(new AMap.Scale());
+
+				        map.addControl(new AMap.OverView({isOpen:true}));
+				});
+
+
+}
+
+</script>
+
+
+<div class="row" style="margin-top:20px">
+	      <div class="col-sm-1"></div>
+	      <div class="col-sm-4">
+	      	<table class="table table-bordered">
+			  <tbody>
+			  <% rsGoods.forEach(function(row){ %>
+			    <tr>
+			      <td rowspan="2"><a href="/search/goodsById?goodsid=<%-row.goodsid%>"><img src='../<%-row.goodsimg%>'    style="width: 200px; height: 200px"/></a></td>
+			      <td>
+			      <a href="">	<%-row.goodsname%></a><br/>
+			      	<%-row.goodsintro%>
+			      </td>
+			    </tr>
+			    <tr>
+			    	<td align='right'>
+			    		价格:<%-row.price%>&nbsp;
+			    		好评度:<%-row.praise%>&nbsp;
+
+			    		<button type="button" class="btn btn-danger btn-xs"  onclick="pos1(<%-row.lng%>,<%-row.lat%>,'<%-row.shopname%>' )">go</button>&nbsp;
+			    	</td>
+			    </tr>
+			  <% }) %>
+			  </tbody>
+			</table>
+	      </div>
+	      <div class="col-sm-6">	
+
+	      <div id="mapContainer" style="width: 100%;  height: 600px;margin-top:20px;margin-left: 20px; " >
+	      	
+	      </div>
+	      </div>
+	      <div class="col-sm-1"></div>
+</div>
+<!-- 模态框（Modal） -->
+	    <% include ../ui/login %>
+</body>
+</html>
